@@ -44,11 +44,11 @@ if __name__ == "__main__":
     ranges=max_values-min_values
     
 #    
-##  standarize the values and map the values from 0 to 1000
+##  standardize the values and map the values from 0 to 1000
     for i in range(all_inputs.shape[1]):
         mean=all_inputs[:,i].mean()
         std=all_inputs[:,i].std()
-        all_inputs[:,i]=(all_inputs[:,i]-mean)*1000/std
+        all_inputs[:,i]=(all_inputs[:,i]-mean)*10/std
 
 #    
     # Encode Labels and transform the label to snumber
@@ -70,7 +70,7 @@ if __name__ == "__main__":
         test_classes = classes_num[test_index]
     print(train_set[1],train_set[2])
     svclassifier = GridSearchCV(SVC(kernel='rbf'),param_grid)
-    svclassifier=svclassifier.fit(all_inputs,classes_num)
+    svclassifier=svclassifier.fit(train_set,train_classes)
     
     
     print("Best: %f using %s" % (svclassifier.best_score_,svclassifier.best_params_))
