@@ -24,12 +24,16 @@ if __name__ == "__main__":
     min_values=np.min(all_inputs,axis=0)
     ranges=max_values-min_values
     
-#   normalize the values and map the values from 0 to 1000
+#   standarize the values and map the values from 0 to 1000
     for i in range(all_inputs.shape[1]):
-        all_inputs[:,i] = (all_inputs[:,i]-min_values[i])*1000/ranges[i]
+#        all_inputs[:,i] = (all_inputs[:,i]-min_values[i])*1000/ranges[i]
+        mean=all_inputs[:,i].mean()
+        std=all_inputs[:,i].std()
+        all_inputs[:,i]=(all_inputs[:,i]-mean)*1000/std
         
         
-    svclassifier = joblib.load('svclassifier.joblib') 
+    svclassifier = joblib.load('svclassifier2.joblib') 
     predicted_label=svclassifier.predict(all_inputs)
     print(predicted_label)
-    np.savetxt('predicted_svm_result.txt',predicted_label,fmt="%.0f")
+#    print(np.sum(predicted_label == '1'))
+    np.savetxt('predicted_svm_result.txt',predicted_label,fmt="%.f")

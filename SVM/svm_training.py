@@ -21,10 +21,10 @@ import scipy.stats
 # Random Seed
 from numpy.random import seed
 
-test_size_ratio = 0.1
+test_size_ratio = 0.10
 
 if __name__ == "__main__":
-    seed(1)
+    seed(4)
 
     # read the data
     df = pd.read_csv("train_test_2019.csv")
@@ -43,10 +43,14 @@ if __name__ == "__main__":
     min_values=np.min(all_inputs,axis=0)
     ranges=max_values-min_values
     
-#   normalize the values and map the values from 0 to 1000
+#    
+##  standarize the values and map the values from 0 to 1000
     for i in range(all_inputs.shape[1]):
-        all_inputs[:,i] = (all_inputs[:,i]-min_values[i])*1000/ranges[i]
-    
+        mean=all_inputs[:,i].mean()
+        std=all_inputs[:,i].std()
+        all_inputs[:,i]=(all_inputs[:,i]-mean)*1000/std
+
+#    
     # Encode Labels and transform the label to snumber
     labelencoder = LabelEncoder()
     labelencoder.fit(all_classes)
@@ -57,7 +61,7 @@ if __name__ == "__main__":
                  'gamma':[0.0001,0.0005,0.001,0.01,0.1,0.5],}#gamma
 
 #   Create Train and Test Set
-    splitter = StratifiedShuffleSplit(n_splits=1, test_size=test_size_ratio, random_state=0)
+    splitter = StratifiedShuffleSplit(n_splits=1, test_size=test_size_ratio, random_state=None)
     splits = splitter.split(all_inputs, classes_num)
     for train_index, test_index in splits:
         train_set = all_inputs[train_index]
@@ -89,4 +93,4 @@ if __name__ == "__main__":
     print("Accuracy: %.2f  ," % accuracy_score(test_classes, predicted_labels,normalize=True))
     print("Number of samples:",test_classes.shape[0])
     # Save the model
-    joblib.dump(svclassifier, 'svclassifier.joblib')
+    joblib.dump(svclassifier, 'svclassifier2.joblib')
