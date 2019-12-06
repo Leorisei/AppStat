@@ -29,7 +29,7 @@ if __name__ == "__main__":
 #        all_inputs[:,i] = (all_inputs[:,i]-min_values[i])*1000/ranges[i]
         mean=all_inputs[:,i].mean()
         std=all_inputs[:,i].std()
-        all_inputs[:,i]=(all_inputs[:,i]-mean)*1000/std
+        all_inputs[:,i]=(all_inputs[:,i]-mean)*10/std
         
         
     svclassifier = joblib.load('svclassifier2.joblib') 
