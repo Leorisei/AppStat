@@ -21,6 +21,7 @@ RFClf.fit(X_train, Y_train)
 Y_pred = RFClf.predict(X_test)
 print("Accuracy:",metrics.accuracy_score(Y_test, Y_pred))
 
+
 lb = preprocessing.LabelBinarizer()
 pred = RFClf.predict_proba(X_test)[:,1]
 test = lb.fit_transform(Y_test).flatten()
@@ -34,4 +35,8 @@ plt.ylabel('True Positive Rate')
 plt.legend()
 plt.show()
 
-print(metrics.confusion_matrix(Y_test,Y_pred,labels=["no","yes"]))
+C = metrics.confusion_matrix(Y_test,Y_pred,labels=["no","yes"])
+print(C)
+P = C[1][1]/(C[1][1]+C[0][1])
+R = C[1][1]/(C[1][1]+C[1][0])
+print("F_Measure:",2*P*R/(P+R))
