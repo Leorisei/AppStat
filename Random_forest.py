@@ -5,6 +5,7 @@ from sklearn import metrics
 from sklearn import preprocessing
 import matplotlib.pyplot as plt
 import csv
+import numpy as np
 
 data = pd.read_csv("train_test_2019.csv",encoding = 'unicode_escape')
 X = data[data.columns[:-1]]
@@ -88,3 +89,26 @@ for row in reader:
     writer.writerow(row)
 in_file.close()    
 out_file.close()
+
+importances = RFClf.feature_importances_
+std = np.std([tree.feature_importances_ for tree in RFClf.estimators_],
+             axis=0)
+feature_num = range(len(importances))
+importances, std, feature_num = (list(t) for t in zip(*sorted(zip(importances, std, feature_num))))
+importances = importances[::-1]
+importances = importances[:10]
+std = std[::-1]
+std = std[:10]
+feature_num = feature_num[::-1]
+feature_num = feature_num[:10]
+Features = []
+for i in range(10):
+    Features.append(X.columns[feature_num[i]])
+# Plot the feature importances of the forest
+plt.figure()
+plt.title("Top 10 Feature Importances")
+plt.bar(range(10),importances, color="r", yerr=std, align="center", tick_label = Features)
+plt.xticks(range(10), rotation='vertical')
+plt.xlim([-1, 10])
+plt.ylim([0,0.18])
+plt.show()
